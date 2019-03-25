@@ -38,7 +38,7 @@ organizations:
     certificateAuthorities:
       - certificate-authority-org1
     adminPrivateKey:
-      path: ../first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/431be900a8689a5acda6c127fe57378e0d97bb3b3a1bc4527c31ab2896fd9da2_sk
+      path: ../first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/5b2ceee4ea5262c74d86b01c551614a184e9b2fd753ee35b6e5772cfac70202c_sk
     signedCert:
       path: ../first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem
 
@@ -50,7 +50,7 @@ organizations:
     certificateAuthorities:
       - certificate-authority-org2
     adminPrivateKey:
-      path: ../first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/dcb304fd6d57f8091977cf336439018447032f39c29fd9ba3559e49a4af4ef39_sk
+      path: ../first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/28fdb4517421272d8afc238cf753ce92e599eb55b9a5a35bf6e8c7381a836112_sk
     signedCert:
       path: ../first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/signcerts/Admin@org2.example.com-cert.pem
 

@@ -266,19 +266,19 @@ function networkDown() {
   docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_COUCH -f $COMPOSE_FILE_KAFKA -f $COMPOSE_FILE_ORG3 down --volumes --remove-orphans
 
   # Don't remove the generated artifacts -- note, the ledgers are always removed
-  if [ "$MODE" != "restart" ]; then
+  #if [ "$MODE" != "restart" ]; then
     # Bring down the network, deleting the volumes
     #Delete any ledger backups
-    docker run -v $PWD:/tmp/first-network --rm hyperledger/fabric-tools:$IMAGETAG rm -Rf /tmp/first-network/ledgers-backup
+   # docker run -v $PWD:/tmp/first-network --rm hyperledger/fabric-tools:$IMAGETAG rm -Rf /tmp/first-network/ledgers-backup
     #Cleanup the chaincode containers
-    clearContainers
+    #clearContainers
     #Cleanup images
-    removeUnwantedImages
+    #removeUnwantedImages
     # remove orderer block and other channel configuration transactions and certs
-    rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config ./org3-artifacts/crypto-config/ channel-artifacts/org3.json
+    #rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config ./org3-artifacts/crypto-config/ channel-artifacts/org3.json
     # remove the docker-compose yaml file that was customized to the example
-    rm -f docker-compose-e2e.yaml
-  fi
+    #rm -f docker-compose-e2e.yaml
+  #fi
 }
 
 # Using docker-compose-e2e-template.yaml, replace constants with private key file names

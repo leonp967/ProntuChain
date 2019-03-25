@@ -3,6 +3,9 @@ SPDX-License-Identifier: Apache-2.0
 */
 
 'use strict';
+const encrypt = require('../../../app/crypto_utils').encryptStringWithRsaPublicKey;
+const encryptAES = require('../../../app/crypto_utils').encryptAES;
+const fs = require('fs');
 
 /**
  * State class. States have a class, unique key, and a lifecycle current state
@@ -47,7 +50,10 @@ class State {
      * @return {buffer} buffer with the data to store
      */
     static serialize(object) {
-        return Buffer.from(JSON.stringify(object));
+        var objString = JSON.stringify(object);
+        var aesEncrypted = encryptAES(objString);
+        var cipher = encrypt(aesEncrypted.toString(), '/home/leonardo/go/src/github.com/hyperledger/prontuchain/app/public.pem');
+        return Buffer.from(cipher);
     }
 
     /**
