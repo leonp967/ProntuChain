@@ -55,8 +55,8 @@ async function main() {
     //console.log('\nstring recebida:' + str + '\n');
     var decryptedResponse = decrypt(issueResponse.toString('base64'), './private.pem', 'senha');
     var aesDecrypted = decryptAES(decryptedResponse);    
-    var buffer = Buffer.from(aesDecrypted, 'hex');
-    record = MedicalRecord.deserialize(buffer.toString());
+    var string = aesDecrypted.toString('utf8');
+    record = MedicalRecord.deserialize(string);
     console.log(`\nRecuperado prontuario eletronico de paciente com cpf ${record.cpf} : Consulta realizada no dia ${record.data} com descricao: ${record.texto}`);
 
     console.log('\nTudo beleza.');

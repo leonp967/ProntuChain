@@ -25,7 +25,7 @@ var decryptAES = function(encrypted, useKey = key) {
 var encryptStringWithRsaPublicKey = function(toEncrypt, relativeOrAbsolutePathToPublicKey) {
     var absolutePath = path.resolve(relativeOrAbsolutePathToPublicKey);
     var publicKey = fs.readFileSync(absolutePath, "utf8");
-    var buffer = Buffer.from(toEncrypt);
+    var buffer = Buffer.from(toEncrypt, 'base64');
     var encrypted = crypto.publicEncrypt(publicKey, buffer);
     return encrypted.toString("base64");
 };
@@ -40,7 +40,7 @@ var decryptStringWithRsaPrivateKey = function(toDecrypt, relativeOrAbsolutePatht
         passphrase: senha,
         padding: crypto.constants.RSA_NO_PADDING
     }, buffer);
-    return decrypted.toString("hex");
+    return decrypted.toString("base64");
 };
 
 module.exports = {
