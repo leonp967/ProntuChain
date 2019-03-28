@@ -53,7 +53,7 @@ class State {
         var objString = JSON.stringify(object);
         var buffer = Buffer.from(objString);
         var aesEncrypted = encryptAES(buffer);
-        var cipher = encrypt(aesEncrypted.toString('base64'), '/home/leonardo/go/src/github.com/hyperledger/prontuchain/app/public.pem');
+        var cipher = encrypt(aesEncrypted.toString('base64'), '../../../app/public.pem');
         return Buffer.from(cipher, 'base64');
     }
 
