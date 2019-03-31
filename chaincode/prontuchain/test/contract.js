@@ -3,7 +3,7 @@ SPDX-License-Identifier: Apache-2.0
 */
 'use strict';
 
-const Chaincode = require('../lib/chaincode');
+const Chaincode = require('../lib/recordcontract');
 const { Stub } = require('fabric-shim');
 
 require('chai').should();
@@ -16,7 +16,7 @@ describe('Chaincode', () => {
         it('should work', async () => {
             const cc = new Chaincode();
             const stub = sinon.createStubInstance(Stub);
-            stub.getFunctionAndParameters.returns({ fcn: 'initFunc', params: [] });
+            stub.getFunctionAndParameters.returns({ fcn: 'create', params: [] });
             const res = await cc.Init(stub);
             res.status.should.equal(Stub.RESPONSE_CODE.OK);
         });

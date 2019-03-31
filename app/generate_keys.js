@@ -1,7 +1,7 @@
 const { generateKeyPair } = require('crypto');
 var fs = require('fs');
 generateKeyPair('rsa', {
-  modulusLength: 8192,
+  modulusLength: 4096,
   publicKeyEncoding: {
     type: 'spki',
     format: 'pem'

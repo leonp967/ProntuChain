@@ -4,7 +4,12 @@
 const { Contract, Context } = require('fabric-contract-api');
 
 const MedicalRecord = require('./record.js');
-const RecordList = require('./recordlist.js');
+const State = require('../ledger-api/state');
+const RecordData = require('./recorddata');
+const RecordList = require('../../../app/crypto_utils');
+const encryptRSA = require('../../../app/crypto_utils').encryptStringWithRsaPublicKey;
+const encryptAES = require('../../../app/crypto_utils').encryptAES;
+const generateAESKey = require('../../../app/crypto_utils').generateAESKey;
 
 class MedicalRecordContext extends Context {
 
@@ -46,11 +51,17 @@ class MedicalRecordContract extends Contract {
      * @param {String} data data da consulta/exame
      * @param {String} texto descricao da consulta/exame
      */
-    async create(ctx, cpf, data, texto) {
+    async create(ctx, cpf, data, texto, chavePublica) {
 
-        let record = MedicalRecord.createInstance(cpf, data, texto);
+        let chave = generateAESKey();
+        let dados = new RecordData( {cpf, data, texto} );
+        let stringDados = JSON.stringify(dados);
+        let dadosCriptografados = encryptAES(stringDados, chave);
+        let chaveCriptografada = encryptRSA(chave, chavePublica);
+        let record = MedicalRecord.createInstance(chaveCriptografada, cpf, data, dadosCriptografados);
         await ctx.recordList.addRecord(record);
-        return record.toBuffer();
+        let buffer = State.serialize(record);
+        return buffer;
     }
 
     /**
@@ -61,7 +72,6 @@ class MedicalRecordContract extends Contract {
      */
     async retrieve(ctx, cpf, data) {
 
-        // Retrieve the current paper using key fields provided
         let recordKey = MedicalRecord.makeKey([cpf, data]);
         let record = await ctx.recordList.getRecord(recordKey);
 

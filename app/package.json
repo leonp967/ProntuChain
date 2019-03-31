@@ -12,7 +12,8 @@
   "dependencies": {
     "fabric-client": "~1.4.0",
     "fabric-network": "~1.4.0",
-    "js-yaml": "^3.12.1"
+    "js-yaml": "^3.12.1",
+    "randomstring": "^1.1.5"
   },
   "devDependencies": {
     "eslint": "^5.6.0"

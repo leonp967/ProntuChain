@@ -3,9 +3,6 @@ SPDX-License-Identifier: Apache-2.0
 */
 
 'use strict';
-const encrypt = require('../../../app/crypto_utils').encryptStringWithRsaPublicKey;
-const encryptAES = require('../../../app/crypto_utils').encryptAES;
-const fs = require('fs');
 
 /**
  * State class. States have a class, unique key, and a lifecycle current state
@@ -50,11 +47,7 @@ class State {
      * @return {buffer} buffer with the data to store
      */
     static serialize(object) {
-        var objString = JSON.stringify(object);
-        var buffer = Buffer.from(objString);
-        var aesEncrypted = encryptAES(buffer);
-        var cipher = encrypt(aesEncrypted.toString('base64'), '../../../app/public.pem');
-        return Buffer.from(cipher, 'base64');
+        return Buffer.from(JSON.stringify(object));
     }
 
     /**

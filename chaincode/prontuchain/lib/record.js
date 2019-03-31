@@ -7,19 +7,16 @@ class MedicalRecord extends State {
 
     constructor(obj) {
         super(MedicalRecord.getClass(), [obj.cpf, obj.data]);
-        Object.assign(this, obj);
+        this.chave = obj.chave;
+        this.dados = obj.dados;
     }
 
-    getCpf() {
-        return this.cpf;
+    getChave() {
+        return this.chave;
     }
 
-    getData() {
-        return this.data;
-    }
-
-    getDescricao() {
-        return this.texto;
+    getDados() {
+        return this.dados;
     }
 
     static fromBuffer(buffer) {
@@ -41,8 +38,8 @@ class MedicalRecord extends State {
     /**
      * Factory method to create a commercial paper object
      */
-    static createInstance(cpf, data, texto) {
-        return new MedicalRecord({ cpf, data, texto });
+    static createInstance(chave, cpf, data, dados) {
+        return new MedicalRecord({ chave, cpf, data, dados });
     }
 
     static getClass() {

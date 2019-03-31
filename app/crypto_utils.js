@@ -1,31 +1,39 @@
 var crypto = require("crypto");
 var path = require("path");
 var fs = require("fs");
+var randomString = require("randomstring");
 
 const key = process.env.ENCRYPTION_KEY || "secret";
-const algorithm = process.env.ENCRYPTION_ALGORITHM || 'aes192';
+const algorithm = process.env.ENCRYPTION_ALGORITHM || 'aes256';
 const inputEncoding = process.env.ENCRYPTION_INPUT_ENCODING || 'utf8';
 const outputEncoding = process.env.ENCRYPTION_OUTPUT_ENCODING || 'hex';
+const IV_LENGTH = 16;
+
+var generateAESKey = function(){
+    return randomString.generate();
+}
 
 var encryptAES = function(value, useKey = key) {
-    var cipher = crypto.createCipher(algorithm, key);
-    var encrypted = cipher.update(value, inputEncoding, outputEncoding);
-    encrypted += cipher.final(outputEncoding)
-    return encrypted
+    let iv = crypto.randomBytes(IV_LENGTH);
+    var cipher = crypto.createCipheriv(algorithm, Buffer.from(useKey), iv);
+    var encrypted = cipher.update(value);
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+    return iv.toString('hex') + ':' + encrypted.toString('hex');
 }
 
 var decryptAES = function(encrypted, useKey = key) {
-    var decipher = crypto.createDecipher(algorithm, key);
-    decipher.setAutoPadding(false);
-    var decrypted = decipher.update(encrypted, outputEncoding, inputEncoding)
-    decrypted += decipher.final(inputEncoding)
-    return decrypted
+    let textParts = encrypted.split(':');
+	let iv = Buffer.from(textParts.shift(), 'hex');
+	let encryptedText = Buffer.from(textParts.join(':'), 'hex');
+	let decipher = crypto.createDecipheriv(algorithm, Buffer.from(useKey), iv);
+	let decrypted = decipher.update(encryptedText);
+
+	decrypted = Buffer.concat([decrypted, decipher.final()]);
+    return decrypted.toString();
 }
 
-var encryptStringWithRsaPublicKey = function(toEncrypt, relativeOrAbsolutePathToPublicKey) {
-    var absolutePath = path.resolve(relativeOrAbsolutePathToPublicKey);
-    var publicKey = fs.readFileSync(absolutePath, "utf8");
-    var buffer = Buffer.from(toEncrypt, 'base64');
+var encryptStringWithRsaPublicKey = function(toEncrypt, publicKey) {
+    var buffer = Buffer.from(toEncrypt, 'utf8');
     var encrypted = crypto.publicEncrypt(publicKey, buffer);
     return encrypted.toString("base64");
 };
@@ -37,15 +45,15 @@ var decryptStringWithRsaPrivateKey = function(toDecrypt, relativeOrAbsolutePatht
     var decrypted = crypto.privateDecrypt(
     {
         key: privateKey.toString(),
-        passphrase: senha,
-        padding: crypto.constants.RSA_NO_PADDING
+        passphrase: senha
     }, buffer);
-    return decrypted.toString("base64");
+    return decrypted.toString("utf8");
 };
 
 module.exports = {
     encryptStringWithRsaPublicKey: encryptStringWithRsaPublicKey,
     decryptStringWithRsaPrivateKey: decryptStringWithRsaPrivateKey,
     encryptAES: encryptAES,
-    decryptAES: decryptAES
+    decryptAES: decryptAES,
+    generateAESKey: generateAESKey
 }

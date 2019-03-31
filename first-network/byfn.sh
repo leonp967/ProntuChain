@@ -269,11 +269,11 @@ function networkDown() {
   #if [ "$MODE" != "restart" ]; then
     # Bring down the network, deleting the volumes
     #Delete any ledger backups
-   # docker run -v $PWD:/tmp/first-network --rm hyperledger/fabric-tools:$IMAGETAG rm -Rf /tmp/first-network/ledgers-backup
+    docker run -v $PWD:/tmp/first-network --rm hyperledger/fabric-tools:$IMAGETAG rm -Rf /tmp/first-network/ledgers-backup
     #Cleanup the chaincode containers
-    #clearContainers
+    clearContainers
     #Cleanup images
-    #removeUnwantedImages
+    removeUnwantedImages
     # remove orderer block and other channel configuration transactions and certs
     #rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config ./org3-artifacts/crypto-config/ channel-artifacts/org3.json
     # remove the docker-compose yaml file that was customized to the example
