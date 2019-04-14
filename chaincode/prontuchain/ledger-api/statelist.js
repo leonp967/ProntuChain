@@ -46,6 +46,11 @@ class StateList {
         return state;
     }
 
+    async getQuery(query){
+        let data = await this.ctx.stub.getQueryResult(query);
+        return data;
+    }
+
     /**
      * Update a state in the list. Puts the new state in world state with
      * appropriate composite key.  Note that state defines its own key.

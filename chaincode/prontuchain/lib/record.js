@@ -2,21 +2,17 @@
 
 // Utility class for ledger state
 const State = require('./../ledger-api/state.js');
+const CryptedRecord = require('./crypted-record');
 
 class MedicalRecord extends State {
 
     constructor(obj) {
         super(MedicalRecord.getClass(), [obj.cpf, obj.data]);
-        this.chave = obj.chave;
-        this.dados = obj.dados;
+        this.cryptedRecord = new CryptedRecord(obj.chave, obj.dados);
     }
 
-    getChave() {
-        return this.chave;
-    }
-
-    getDados() {
-        return this.dados;
+    getCryptedRecord() {
+        return this.cryptedRecord;
     }
 
     static fromBuffer(buffer) {

@@ -70,16 +70,27 @@ class MedicalRecordContract extends Contract {
      * @param {BigInteger} cpf cpf do paciente
      * @param {String} data data da consulta/exame
      */
-    async retrieve(ctx, cpf, data) {
+    async retrieve(ctx, cpf, dataFrom, dataTo) {
 
         let recordKey = MedicalRecord.makeKey([cpf, data]);
-        let record = await ctx.recordList.getRecord(recordKey);
+        var query = {};
+        query.selector = {};
+        query.selector.cpf = cpf;
+        if(dataFrom){
+            query.selector.dataFrom = {};
+            query.selector.dataFrom.$gte = dataTo;
+        }
+        if(dataTo){
+            query.selector.dataTo = {};
+            query.selector.dataTo.$lte = dataTo;
+        }
+        let response = await ctx.recordList.getQuery(JSON.stringify(query));
 
         if(!record) {
             throw new Error('Nao existe registro com os dados recebidos');
         }
 
-        return record.toBuffer();
+        return response.toBuffer();
     }
 
 }
