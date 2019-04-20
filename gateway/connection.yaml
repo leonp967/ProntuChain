@@ -29,6 +29,14 @@ channels:
         ledgerQuery: true
         eventSource: true
 
+certificateAuthorities:
+  ca.example.com:
+    url: grpcs://localhost:8052
+    caName: ca.example.com
+    tlsCACerts:
+      path: ../first-network/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/tlscacerts/tlsca.org1.example.com-cert.pem
+
+
 organizations:
   Org1:
     mspid: Org1MSP
@@ -36,7 +44,7 @@ organizations:
       - peer0.org1.example.com
       - peer1.org1.example.com
     certificateAuthorities:
-      - certificate-authority-org1
+      - ca.example.com
     adminPrivateKey:
       path: ../first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/5b2ceee4ea5262c74d86b01c551614a184e9b2fd753ee35b6e5772cfac70202c_sk
     signedCert:
@@ -48,7 +56,7 @@ organizations:
       - peer0.org2.example.com
       - peer1.org2.example.com
     certificateAuthorities:
-      - certificate-authority-org2
+      - ca.example.com
     adminPrivateKey:
       path: ../first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/28fdb4517421272d8afc238cf753ce92e599eb55b9a5a35bf6e8c7381a836112_sk
     signedCert:
