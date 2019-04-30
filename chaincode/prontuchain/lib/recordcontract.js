@@ -6,14 +6,14 @@ const { Contract, Context } = require('fabric-contract-api');
 const MedicalRecord = require('./record.js');
 const State = require('../ledger-api/state');
 const RecordData = require('./recorddata');
-const RecordList = require('../../../app/crypto_utils');
-const encryptRSA = require('../../../app/crypto_utils').encryptStringWithRsaPublicKey;
-const encryptAES = require('../../../app/crypto_utils').encryptAES;
-const generateAESKey = require('../../../app/crypto_utils').generateAESKey;
+const RecordList = require('./recordlist');
+const encryptRSA = require('./crypto_utils').encryptStringWithRsaPublicKey;
+const encryptAES = require('./crypto_utils').encryptAES;
+const generateAESKey = require('./crypto_utils').generateAESKey;
 
 class MedicalRecordContext extends Context {
 
-    constructor() {
+    constructor() { 
         super();
         this.recordList = new RecordList(this);
     }
@@ -54,7 +54,7 @@ class MedicalRecordContract extends Contract {
     async create(ctx, cpf, data, texto, chavePublica) {
 
         let chave = generateAESKey();
-        let dados = new RecordData( {cpf, data, texto} );
+        let dados = new RecordData(cpf, data, texto);
         let stringDados = JSON.stringify(dados);
         let dadosCriptografados = encryptAES(stringDados, chave);
         let chaveCriptografada = encryptRSA(chave, chavePublica);
@@ -67,18 +67,19 @@ class MedicalRecordContract extends Contract {
     /**
      * Recupera um registro de prontuario eletronico
      * @param {Context} ctx 
-     * @param {BigInteger} cpf cpf do paciente
-     * @param {String} data data da consulta/exame
+     * @param {String} cpf cpf do paciente
+     * @param {String} dataFrom data inicial da consulta/exame
+     * @param {String} dataTo data final da consulta/exame
      */
     async retrieve(ctx, cpf, dataFrom, dataTo) {
 
-        let recordKey = MedicalRecord.makeKey([cpf, data]);
+        //let recordKey = MedicalRecord.makeKey([cpf, data]);
         var query = {};
         query.selector = {};
         query.selector.cpf = cpf;
         if(dataFrom){
             query.selector.dataFrom = {};
-            query.selector.dataFrom.$gte = dataTo;
+            query.selector.dataFrom.$gte = dataFrom;
         }
         if(dataTo){
             query.selector.dataTo = {};

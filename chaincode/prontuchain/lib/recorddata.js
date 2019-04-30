@@ -2,8 +2,10 @@
 
 class RecordData {
 
-    constructor(obj) {
-        Object.assign(this, obj);
+    constructor(cpf, data, texto) {
+        this.cpf = cpf;
+        this.data = data;
+        this.texto = texto;
     }
 
     getCpf() {

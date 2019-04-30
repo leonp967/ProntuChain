@@ -2,7 +2,7 @@
 
 // Utility class for ledger state
 const State = require('./../ledger-api/state.js');
-const CryptedRecord = require('./crypted-record');
+const CryptedRecord = require('./crypted-record.js');
 
 class MedicalRecord extends State {
 

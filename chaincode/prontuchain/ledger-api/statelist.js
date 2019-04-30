@@ -46,7 +46,7 @@ class StateList {
         return state;
     }
 
-    async getQuery(query){
+    async getQuery(query) {
         let data = await this.ctx.stub.getQueryResult(query);
         return data;
     }

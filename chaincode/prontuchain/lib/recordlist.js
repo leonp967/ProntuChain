@@ -23,6 +23,10 @@ class RecordList extends StateList {
     async updateRecord(record) {
         return this.updateState(record);
     }
+
+    async getQuery(query) {
+        return this.getQuery(query);
+    }
 }
 
 
