@@ -74,20 +74,28 @@ class MedicalRecordContract extends Contract {
     async retrieve(ctx, cpf, dataFrom, dataTo) {
 
         //let recordKey = MedicalRecord.makeKey([cpf, data]);
-        var query = {};
-        query.selector = {};
-        query.selector.cpf = cpf;
-        if(dataFrom){
-            query.selector.dataFrom = {};
-            query.selector.dataFrom.$gte = dataFrom;
-        }
-        if(dataTo){
-            query.selector.dataTo = {};
-            query.selector.dataTo.$lte = dataTo;
-        }
-        let response = await ctx.recordList.getQuery(JSON.stringify(query));
+        // var query = {};
+        // query.selector = {};
+        // query.selector.cpf = cpf;
+        // if(dataFrom){
+        //     query.selector.dataFrom = {};
+        //     query.selector.dataFrom.$gte = dataFrom;
+        // }
+        // if(dataTo){
+        //     query.selector.dataTo = {};
+        //     query.selector.dataTo.$lte = dataTo;
+        // }
+        var query = "{\"selector\":{\"cpf\":\"" + cpf + "\"}}";
 
-        if(!record) {
+        let response;
+
+        try {
+            response = await ctx.recordList.getQuery(query);
+        } catch(error){
+            throw new Error(error);
+        }
+
+        if(!response) {
             throw new Error('Nao existe registro com os dados recebidos');
         }
 
