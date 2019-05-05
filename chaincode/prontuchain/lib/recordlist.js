@@ -24,7 +24,7 @@ class RecordList extends StateList {
         return this.updateState(record);
     }
 
-    async getQuery(query) {
+    async getRichQuery(query) {
         return this.getQuery(query);
     }
 }

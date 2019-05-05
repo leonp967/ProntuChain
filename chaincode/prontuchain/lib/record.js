@@ -7,12 +7,22 @@ const CryptedRecord = require('./crypted-record.js');
 class MedicalRecord extends State {
 
     constructor(obj) {
-        super(MedicalRecord.getClass(), [obj.cpf, obj.data]);
+        super(MedicalRecord.getClass(), [obj.cpf, obj.date]);
         this.cryptedRecord = new CryptedRecord(obj.chave, obj.dados);
+        this.cpf = obj.cpf;
+        this.date = obj.date;
     }
 
     getCryptedRecord() {
         return this.cryptedRecord;
+    }
+
+    getCpf() {
+        return this.cpf;
+    }
+
+    getDate() {
+        return this.date;
     }
 
     static fromBuffer(buffer) {
@@ -34,8 +44,8 @@ class MedicalRecord extends State {
     /**
      * Factory method to create a commercial paper object
      */
-    static createInstance(chave, cpf, data, dados) {
-        return new MedicalRecord({ chave, cpf, data, dados });
+    static createInstance(chave, cpf, date, dados) {
+        return new MedicalRecord({ chave, cpf, date, dados });
     }
 
     static getClass() {

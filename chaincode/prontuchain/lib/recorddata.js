@@ -2,10 +2,15 @@
 
 class RecordData {
 
-    constructor(cpf, data, texto) {
+    constructor(cpf, data, tipo, texto) {
         this.cpf = cpf;
         this.data = data;
         this.texto = texto;
+        this.tipo = tipo;
+    }
+
+    getTipo() {
+        return this.tipo;
     }
 
     getCpf() {

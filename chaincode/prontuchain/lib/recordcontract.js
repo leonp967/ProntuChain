@@ -18,6 +18,44 @@ class MedicalRecordContext extends Context {
         this.recordList = new RecordList(this);
     }
 
+    async getAllResults(iterator, isHistory) {
+        let allResults = [];
+        while (true) {
+          let res = await iterator.next();
+    
+          if (res.value && res.value.value.toString()) {
+            let jsonRes = {};
+            console.log(res.value.value.toString('utf8'));
+    
+            if (isHistory && isHistory === true) {
+              jsonRes.TxId = res.value.tx_id;
+              jsonRes.Timestamp = res.value.timestamp;
+              jsonRes.IsDelete = res.value.is_delete.toString();
+              try {
+                jsonRes.Value = JSON.parse(res.value.value.toString('utf8'));
+              } catch (err) {
+                console.log(err);
+                jsonRes.Value = res.value.value.toString('utf8');
+              }
+            } else {
+              jsonRes.Key = res.value.key;
+              try {
+                jsonRes.Record = JSON.parse(res.value.value.toString('utf8'));
+              } catch (err) {
+                console.log(err);
+                jsonRes.Record = res.value.value.toString('utf8');
+              }
+            }
+            allResults.push(jsonRes);
+          }
+          if (res.done) {
+            console.log('end of data');
+            await iterator.close();
+            console.info(allResults);
+            return allResults;
+          }
+        }
+      }
 }
 
 class MedicalRecordContract extends Contract {
@@ -51,10 +89,10 @@ class MedicalRecordContract extends Contract {
      * @param {String} data data da consulta/exame
      * @param {String} texto descricao da consulta/exame
      */
-    async create(ctx, cpf, data, texto, chavePublica) {
+    async create(ctx, cpf, data, tipo, texto, chavePublica) {
 
         let chave = generateAESKey();
-        let dados = new RecordData(cpf, data, texto);
+        let dados = new RecordData(cpf, data, tipo, texto);
         let stringDados = JSON.stringify(dados);
         let dadosCriptografados = encryptAES(stringDados, chave);
         let chaveCriptografada = encryptRSA(chave, chavePublica);
@@ -74,32 +112,33 @@ class MedicalRecordContract extends Contract {
     async retrieve(ctx, cpf, dataFrom, dataTo) {
 
         //let recordKey = MedicalRecord.makeKey([cpf, data]);
-        // var query = {};
-        // query.selector = {};
-        // query.selector.cpf = cpf;
-        // if(dataFrom){
-        //     query.selector.dataFrom = {};
-        //     query.selector.dataFrom.$gte = dataFrom;
-        // }
-        // if(dataTo){
-        //     query.selector.dataTo = {};
-        //     query.selector.dataTo.$lte = dataTo;
-        // }
-        var query = "{\"selector\":{\"cpf\":\"" + cpf + "\"}}";
+        var query = {};
+        query.selector = {};
+        query.selector.cpf = cpf;
+        if(dataFrom || dataTo){
+            query.selector.date = {};
+        }
+        if(dataFrom){
+            query.selector.date.$gte = dataFrom;
+        }
+        if(dataTo){
+            query.selector.date.$lte = dataTo;
+        }
 
-        let response;
+        let results;
 
         try {
-            response = await ctx.recordList.getQuery(query);
-        } catch(error){
+            var iterator = await ctx.recordList.getRichQuery(JSON.stringify(query));
+            results = await ctx.getAllResults(iterator, false);
+        } catch(error) {
             throw new Error(error);
         }
 
-        if(!response) {
+        if(!results || results.length == 0) {
             throw new Error('Nao existe registro com os dados recebidos');
         }
 
-        return response.toBuffer();
+        return JSON.stringify(results);
     }
 
 }

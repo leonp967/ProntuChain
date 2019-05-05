@@ -1,16 +1,20 @@
 class CryptedRecord {
 
     constructor(chave, dados){
-        this.chaveCrypto = chave;
-        this.dadosCrypto = dados;
+        this.keyCrypto = chave;
+        this.dataCrypto = dados;
     }
 
-    getChaveCrypto(){
-        return chaveCrypto;
+    getKeyCrypto(){
+        return keyCrypto;
     }
 
-    getDadosCrypto(){
-        return dadosCrypto;
+    getDataCrypto(){
+        return dataCrypto;
+    }
+
+    createInstance(obj){
+        return new CryptedRecord(obj.keyCrypto, obj.dataCrypto);
     }
 }
 
