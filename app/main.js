@@ -61,7 +61,7 @@ async function main() {
     console.log('Criando prontuario...\n');
     let dir = path.join(homedir, 'prontuchain/keys', 'alaba@gmail.com');
     let chavePublica = fs.readFileSync(path.join(dir, '/public.pem'), "utf8");
-    let issueResponse = await contract.submitTransaction('create', '04222039047', '29/03/2019', '1', 'batata doce.', chavePublica);
+    let issueResponse = await contract.submitTransaction('create', '04222039047', '08/05/2019', '2', 'Praesent sed velit id odio viverra hendrerit porttitor vel velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In sit amet neque aliquam, consectetur neque varius, blandit nulla. Mauris interdum odio sit amet libero tincidunt placerat. Etiam mattis hendrerit pretium. Proin et leo et augue tristique venenatis nec ac augue. Donec quam enim, efficitur a eros vel, dignissim pellentesque nisi. In ac fermentum velit. ', chavePublica);
     let record = MedicalRecord.fromBuffer(issueResponse);
     console.log(record);
 

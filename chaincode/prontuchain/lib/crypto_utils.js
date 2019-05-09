@@ -38,14 +38,13 @@ var encryptStringWithRsaPublicKey = function(toEncrypt, publicKey) {
     return encrypted.toString("base64");
 };
 
-var decryptStringWithRsaPrivateKey = function(toDecrypt, relativeOrAbsolutePathtoPrivateKey, senha) {
+var decryptStringWithRsaPrivateKey = function(toDecrypt, relativeOrAbsolutePathtoPrivateKey) {
     var absolutePath = path.resolve(relativeOrAbsolutePathtoPrivateKey);
     var privateKey = fs.readFileSync(absolutePath, "utf8");
     var buffer = Buffer.from(toDecrypt, "base64");
     var decrypted = crypto.privateDecrypt(
     {
-        key: privateKey.toString(),
-        passphrase: senha
+        key: privateKey.toString()
     }, buffer);
     return decrypted.toString("utf8");
 };
