@@ -29,39 +29,14 @@ async function main() {
       discovery: { enabled:false, asLocalhost: true }
     };
 
-    // var query = {};
-    // query.selector = {};
-    // query.selector.cpf = '04222039047';
-    // var dataFrom = '29/03/2019';
-    // var dataTo = '29/03/2019';
-    // if(dataFrom || dataTo){
-    //   query.selector.date = {};
-    // }
-    // if(dataFrom){
-    //     query.selector.date.$gte = dataFrom;
-    // }
-    // if(dataTo){
-    //     query.selector.date.$lte = dataTo;
-    // }
-    // console.log(JSON.stringify(query));
-
     await gateway.connect(connectionProfile, connectionOptions);
     const network = await gateway.getNetwork('prontuchain');
     const contract = await network.getContract('recordcontract', 'org.prontuchain.MedicalRecord');
 
-    // let issueResponse = await contract.submitTransaction('retrieve', '04222039047', '29/03/2019', '29/03/2019');
-    // const QueryResult = require('./query_result');
-    // let array = JSON.parse(issueResponse);
-    // array = eval(array);
-    // array.forEach((obj) => {
-    //   let record = new MedicalRecord(obj.Record);
-    //   console.log(obj);
-    // })
-
     console.log('Criando prontuario...\n');
     let dir = path.join(homedir, 'prontuchain/keys', 'alaba@gmail.com');
     let chavePublica = fs.readFileSync(path.join(dir, '/public.pem'), "utf8");
-    let issueResponse = await contract.submitTransaction('create', '04222039047', '08/05/2019', '2', 'Praesent sed velit id odio viverra hendrerit porttitor vel velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In sit amet neque aliquam, consectetur neque varius, blandit nulla. Mauris interdum odio sit amet libero tincidunt placerat. Etiam mattis hendrerit pretium. Proin et leo et augue tristique venenatis nec ac augue. Donec quam enim, efficitur a eros vel, dignissim pellentesque nisi. In ac fermentum velit. ', chavePublica);
+    let issueResponse = await contract.submitTransaction('create', '04222039047', '09/05/2019', '2', 'Praesent sed velit id odio viverra hendrerit porttitor vel velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In sit amet neque aliquam, consectetur neque varius, blandit nulla. Mauris interdum odio sit amet libero tincidunt placerat. Etiam mattis hendrerit pretium. Proin et leo et augue tristique venenatis nec ac augue. Donec quam enim, efficitur a eros vel, dignissim pellentesque nisi. In ac fermentum velit. ', chavePublica);
     let record = MedicalRecord.fromBuffer(issueResponse);
     console.log(record);
 
