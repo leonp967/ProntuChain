@@ -116,7 +116,7 @@ class MedicalRecordContract extends Contract {
         if(dataTo){
             query.selector.date.$lte = dataTo;
         }
-        if(type){
+        if(type && type > 0){
             query.selector.type = type;
         }
 
