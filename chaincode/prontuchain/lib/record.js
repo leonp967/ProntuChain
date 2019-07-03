@@ -11,6 +11,7 @@ class MedicalRecord extends State {
         this.cryptedRecord = new CryptedRecord(obj.chave, obj.dados);
         this.cpf = obj.cpf;
         this.date = obj.date;
+        this.type = obj.type;
     }
 
     getCryptedRecord() {
@@ -25,6 +26,10 @@ class MedicalRecord extends State {
         return this.date;
     }
 
+    getType() {
+        return this.type;
+    }
+
     static fromBuffer(buffer) {
         return MedicalRecord.deserialize(Buffer.from(JSON.parse(buffer)));
     }
@@ -33,19 +38,12 @@ class MedicalRecord extends State {
         return Buffer.from(JSON.stringify(this));
     }
 
-    /**
-     * Deserialize a state data to commercial paper
-     * @param {Buffer} data to form back into the object
-     */
     static deserialize(data) {
         return State.deserializeClass(data, MedicalRecord);
     }
 
-    /**
-     * Factory method to create a commercial paper object
-     */
-    static createInstance(chave, cpf, date, dados) {
-        return new MedicalRecord({ chave, cpf, date, dados });
+    static createInstance(chave, cpf, date, type, dados) {
+        return new MedicalRecord({ chave, cpf, date, type, dados });
     }
 
     static getClass() {

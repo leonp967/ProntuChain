@@ -61,13 +61,9 @@ class MedicalRecordContext extends Context {
 class MedicalRecordContract extends Contract {
 
     constructor() {
-        // Unique namespace when multiple contracts per chaincode file
         super('org.prontuchain.MedicalRecord');
     }
 
-    /**
-     * Define a custom context for commercial paper
-    */
     createContext() {
         return new MedicalRecordContext();
     }
@@ -77,8 +73,6 @@ class MedicalRecordContract extends Contract {
      * @param {Context} ctx the transaction context
      */
     async instantiate(ctx) {
-        // No implementation required with this example
-        // It could be where data migration is performed, if necessary
         console.log('Instantiate the contract');
     }
 
@@ -96,7 +90,7 @@ class MedicalRecordContract extends Contract {
         let stringDados = JSON.stringify(dados);
         let dadosCriptografados = encryptAES(stringDados, chave);
         let chaveCriptografada = encryptRSA(chave, chavePublica);
-        let record = MedicalRecord.createInstance(chaveCriptografada, cpf, data, dadosCriptografados);
+        let record = MedicalRecord.createInstance(chaveCriptografada, cpf, data, tipo, dadosCriptografados);
         await ctx.recordList.addRecord(record);
         let buffer = State.serialize(record);
         return buffer;
@@ -109,9 +103,7 @@ class MedicalRecordContract extends Contract {
      * @param {String} dataFrom data inicial da consulta/exame
      * @param {String} dataTo data final da consulta/exame
      */
-    async retrieve(ctx, cpf, dataFrom, dataTo) {
-
-        //let recordKey = MedicalRecord.makeKey([cpf, data]);
+    async retrieve(ctx, type, cpf, dataFrom, dataTo) {
         var query = {};
         query.selector = {};
         query.selector.cpf = cpf;
@@ -123,6 +115,9 @@ class MedicalRecordContract extends Contract {
         }
         if(dataTo){
             query.selector.date.$lte = dataTo;
+        }
+        if(type){
+            query.selector.type = type;
         }
 
         let results;
