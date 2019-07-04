@@ -129,8 +129,8 @@ class MedicalRecordContract extends Contract {
             throw new Error(error);
         }
 
-        if(!results || results.length == 0) {
-            throw new Error('Nao existe registro com os dados recebidos');
+        if(!results) {
+            throw new Error('Erro inesperado!');
         }
 
         return JSON.stringify(results);
